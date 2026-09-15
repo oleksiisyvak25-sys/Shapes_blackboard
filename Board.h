@@ -32,7 +32,7 @@ public:
 
     void list() const;
 
-    bool selectedById(const std::string& id);
+    bool selectById(const std::string& id);
 
     bool selectedByCoordinates(int px, int py);
 

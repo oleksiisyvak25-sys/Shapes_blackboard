@@ -99,7 +99,7 @@ bool Board::removeSelected() {
 
     for (size_t i = 0; i < this->shapes.size(); i++) {
         if (this->shapes[i].get() == this->selectedShape) {
-            std::cout << this->selectedShape->getId() << " " << this->selectedShape->getType() << "was removed\n";
+            std::cout << this->selectedShape->getId() << " " << this->selectedShape->getType() << " was removed\n";
             this->shapes.erase(this->shapes.begin() + i);
             this->selectedShape = nullptr;
             return true;
