@@ -5,8 +5,9 @@
 #ifndef SHAPES_BLACKBOARD_BOARD_H
 #define SHAPES_BLACKBOARD_BOARD_H
 
-#include <string>
 #include <vector>
+#include <memory>
+#include <string>
 #include "Shape.h"
 
 
@@ -31,7 +32,7 @@ public:
 
     void list() const;
 
-    bool selectById(const std::string& id);
+    bool selectedById(const std::string& id);
 
     bool selectedByCoordinates(int px, int py);
 
