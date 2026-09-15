@@ -41,12 +41,46 @@ void Board::draw() const {
         this->shapes[i]->draw(grid,this->width, this->height);
     }
 
+    std::cout << "    ";
+    for (int c = 0; c < this->width; c++) {
+        if (c % 10 == 0) {
+            std::cout << (c / 10);
+        } else {
+            std::cout << " ";
+        }
+    }
+    std::cout << "\n";
+
+    std::cout << "    ";
+    for (int c = 0; c < this->width; c++) {
+        std::cout << (c % 10);
+    }
+    std::cout << "\n";
+
+    std::cout << "   +";
+    for (int c = 0; c < this->width; c++) {
+        std::cout << "-";
+    }
+    std::cout << "+\n";
+
     for (int r = 0; r < this->height; r++) {
-        for (int c = 0; c < this-> width; c++) {
+        if (r < 10) {
+            std::cout << " " << r << " |";
+        } else {
+            std::cout << r << " |";
+        }
+
+        for (int c = 0; c < this->width; c++) {
             std::cout << grid[r][c];
         }
-        std::cout << "\n";
+        std::cout << "|\n";
     }
+
+    std::cout << "   +";
+    for (int c = 0; c < this->width; c++) {
+        std::cout << "-";
+    }
+    std::cout << "+\n";
 }
 
 void Board::list() const {

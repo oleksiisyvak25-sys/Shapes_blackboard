@@ -60,20 +60,17 @@ int main() {
         }
 
         else if (command == "select") {
-            std::string firstArg;
-            ss >> firstArg;
-
-            int x;
-            std::stringstream testNumber(firstArg);
-
-            if (testNumber >> x && !(ss.eof() && firstArg.length() == 4)) {
-                int y;
-                if (ss >> y) {
+            std::string arg1, arg2;
+            if (ss >> arg1) {
+                if (ss >> arg2) {
+                    int x = std::stoi(arg1);
+                    int y = std::stoi(arg2);
                     board.selectedByCoordinates(x, y);
+                } else {
+                    board.selectById(arg1);
                 }
-                else {
-                    board.selectById(firstArg);
-                }
+            } else {
+                std::cout << "Error: missing select argument\n";
             }
         }
 
