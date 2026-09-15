@@ -4,6 +4,7 @@
 #include <memory>
 #include "Board.h"
 #include "Rectangle.h"
+#include "Circle.h"
 
 int main() {
     Board board (80,25);
@@ -49,6 +50,17 @@ int main() {
                     std::string id = board.getNextId();
                     board.addShape(std::make_unique<Rectangle>(id, x, y, color, isFilled, width, height));
                     std::cout << "< " << id << " " << shapeType << " " << color << " " << width << " " << height << "\n";
+                }
+                else {
+                    std::cout << "Error: invalid number of arguments\n";
+                }
+            }
+            else if (shapeType == "circle") {
+                int x, y, radius;
+                if (ss >> x >> y >> radius) {
+                    std::string id = board.getNextId();
+                    board.addShape(std::make_unique<Circle>(id, x, y, color, isFilled, radius));
+                    std::cout << "< " << id << " " << shapeType << " " << color << " " << radius << "\n";
                 }
                 else {
                     std::cout << "Error: invalid number of arguments\n";
