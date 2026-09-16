@@ -34,6 +34,11 @@ public:
         return color;
     }
 
+    virtual void move(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+
     void setColor(const std::string& newColor) {
         color = newColor;
     }

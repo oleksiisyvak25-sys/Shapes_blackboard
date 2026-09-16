@@ -83,7 +83,7 @@ void Board::draw() const {
                 else if (cell == 'b' || cell == 'B') ansiColor = "\033[34m";
                 else if (cell == 'm' || cell == 'M') ansiColor = "\033[35m";
                 else if (cell == 'c' || cell == 'C') ansiColor = "\033[36m";
-                else if (cell == '*') ansiColor = "\033[1m";                
+                else if (cell == '*') ansiColor = "\033[1m";
 
                 std::cout << ansiColor << cell << "\033[0m";
             }
@@ -169,23 +169,13 @@ bool Board::paintSelected(const std::string &newColor) {
 }
 
 bool Board::moveSelected(int newX, int newY) {
-    if (this->selectedShape == nullptr) {
-        std::cout << "There is no shape selected\n";
+    if (selectedShape != nullptr) {
+        selectedShape->move(newX, newY);
+        std::cout << selectedShape->getId() << " " << selectedShape->getType() << " moved\n";
+        return true;
+    }
+    else {
+        std::cout << "Error: no shape selected\n";
         return false;
     }
-
-    this->selectedShape->setPosition(newX, newY);
-
-    for (size_t i = 0; i < this->shapes.size(); i++) {
-        if (this->shapes[i].get() == this->selectedShape) {
-            std::unique_ptr<Shape> movedShape = std::move(this->shapes[i]);
-            this->shapes.erase(this->shapes.begin() + i);
-            this->shapes.push_back(std::move(movedShape));
-            this->selectedShape = this->shapes.back().get();
-            break;
-        }
-    }
-
-    std::cout << this->selectedShape->getId() << " " << this->selectedShape->getType() << " moved\n";
-    return true;
 }

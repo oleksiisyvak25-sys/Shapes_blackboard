@@ -70,6 +70,12 @@ public:
         return "line";
     }
 
+    void move(int dx, int dy) override {
+        Shape::move(dx, dy);
+        x2 += dx;
+        y2 += dy;
+    }
+
     std::string getInfo() const override {
         return id + " " + getType() + " " + color + " " +
                std::to_string(x) + " " + std::to_string(y) + " " +

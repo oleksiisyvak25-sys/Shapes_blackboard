@@ -18,6 +18,14 @@ private:
         return (p1x - p3x) * (p2y - p3y) - (p2x - p3x) * (p1y - p3y);
     }
 
+    void move(int dx, int dy) override {
+        Shape::move(dx, dy);
+        x2 += dx;
+        y2 += dy;
+        x3 += dx;
+        y3 += dy;
+    }
+
     bool isInside(double px, double py, double ax, double ay, double bx, double by, double cx, double cy) const {
         double d1 = sign(px, py, ax, ay, bx, by);
         double d2 = sign(px, py, bx, by, cx, cy);
@@ -61,17 +69,13 @@ public:
     void draw(std::vector<std::vector<char>> &grid, int boardWidth, int boardHeight) const override {
         char symbol = getColorChar();
 
-        int minX = std::min({x, x2, x3});
-        int maxX = std::max({x, x2, x3});
-        int minY = std::min({y, y2, y3});
-        int maxY = std::max({y, y2, y3});
+        int minX = std::max(0, std::min({x, x2, x3}));
+        int maxX = std::min(boardWidth - 1, std::max({x, x2, x3}));
+        int minY = std::max(0, std::min({y, y2, y3}));
+        int maxY = std::min(boardHeight - 1, std::max({y, y2, y3}));
 
         for (int py = minY; py <= maxY; ++py) {
             for (int px = minX; px <= maxX; ++px) {
-                if (px < 0 || px >= boardWidth || py < 0 || py >= boardHeight) {
-                    continue;
-                }
-
                 double ax = (double)x, ay = (double)y;
                 double bx = (double)x2, by = (double)y2;
                 double cx = (double)x3, cy = (double)y3;

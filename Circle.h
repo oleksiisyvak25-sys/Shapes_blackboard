@@ -29,17 +29,16 @@ public:
     }
 
     bool containsPoint(int px, int py) const override {
-        int dx = (px - x) * 2;
-        int dy = py - y;
+        double dx = (double)(px - x);
+        double dy = (double)(py - y) * 2.0;
         double distSquared = dx * dx + dy * dy;
-        double r = radius * 2;
+        double r = radius * 2.0;
 
         if (isFilled) {
             return distSquared <= r * r;
-        }
-        else {
+        } else {
             double dist = std::sqrt(distSquared);
-            return std::abs(dist - r) < 1.2;
+            return std::abs(dist - r) < 1.5;
         }
     }
 
