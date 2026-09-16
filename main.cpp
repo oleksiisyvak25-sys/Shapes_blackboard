@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "Rectangle.h"
 #include "Circle.h"
+#include "Triangle.h"
 
 int main() {
     Board board (80,25);
@@ -64,6 +65,16 @@ int main() {
                 }
                 else {
                     std::cout << "Error: invalid number of arguments\n";
+                }
+            }
+            else if (shapeType == "triangle") {
+                int x, y, x2, y2, x3, y3;
+                if (ss >> x >> y >> x2 >> y2 >> x3 >> y3) {
+                    std::string id = board.getNextId();
+                    board.addShape(std::make_unique<Triangle>(id, x, y, color, isFilled, x2, y2, x3, y3));
+                    std::cout << "< " << id << " " << shapeType << " " << color << " " << x2 << " " << y2 << " " << x3 << " " << y3 << "\n";
+                } else {
+                    std::cout << "Error: invalid number of arguments for triangle\n";
                 }
             }
             else {

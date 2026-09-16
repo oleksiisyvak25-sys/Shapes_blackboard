@@ -1,3 +1,5 @@
 add_executable(Shapes_blackboard main.cpp Board.cpp
         Circle.cpp
-        Circle.h)
+        Circle.h
+        Triangle.cpp
+        Triangle.h)
