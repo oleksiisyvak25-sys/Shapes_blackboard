@@ -71,7 +71,22 @@ void Board::draw() const {
         }
 
         for (int c = 0; c < this->width; c++) {
-            std::cout << grid[r][c];
+            char cell = grid[r][c];
+            if (cell == ' ') {
+                std::cout << ' ';
+            } else {
+                std::string ansiColor = "\033[37m";
+
+                if (cell == 'r' || cell == 'R') ansiColor = "\033[31m";
+                else if (cell == 'g' || cell == 'G') ansiColor = "\033[32m";
+                else if (cell == 'y' || cell == 'Y') ansiColor = "\033[33m";
+                else if (cell == 'b' || cell == 'B') ansiColor = "\033[34m";
+                else if (cell == 'm' || cell == 'M') ansiColor = "\033[35m";
+                else if (cell == 'c' || cell == 'C') ansiColor = "\033[36m";
+                else if (cell == '*') ansiColor = "\033[1m";                
+
+                std::cout << ansiColor << cell << "\033[0m";
+            }
         }
         std::cout << "|\n";
     }
