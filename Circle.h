@@ -7,6 +7,9 @@
 
 #include "Shape.h"
 #include <cmath>
+#include <iostream>
+#include <sstream>
+#include <istream>
 
 class Circle : public Shape {
 private:
@@ -74,6 +77,31 @@ public:
         }
     }
 
+    std::string serialize() const override {
+        return "circle " + std::to_string(x) + " " + std::to_string(y) + " " +
+               (color.empty() ? "*" : color) + " " + (isFilled ? "fill" : "frame") + " " +
+               std::to_string(radius);
+    }
+
+    bool edit(const std::string &args) override {
+        std::stringstream ss(args);
+        int nx, ny, nr;
+        if (ss >> nx >> ny >> nr) {
+            x = nx;
+            y = ny;
+            radius = nr;
+            return true;
+        }
+
+        ss.clear();
+        ss.str(args);
+        if (ss >> nr) {
+            radius = nr;
+            return true;
+        }
+
+        return false;
+    }
 };
 
 #endif //SHAPES_BLACKBOARD_CIRCLE_H

@@ -9,6 +9,8 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <sstream>
+#include <istream>
 
 class Line : public Shape {
 private:
@@ -103,6 +105,23 @@ public:
                 grid[py][px] = symbol;
             }
         }
+    }
+
+    std::string serialize() const override {
+        return "line " + std::to_string(x) + " " + std::to_string(y) + " " +
+               (color.empty() ? "*" : color) + " " +
+               std::to_string(x2) + " " + std::to_string(y2);
+    }
+
+    bool edit(const std::string &args) override {
+        std::stringstream ss(args);
+        int nx1, ny1, nx2, ny2;
+        if (ss >> nx1 >> ny1 >> nx2 >> ny2) {
+            x = nx1;   y = ny1;
+            x2 = nx2;  y2 = ny2;
+            return true;
+        }
+        return false;
     }
 };
 

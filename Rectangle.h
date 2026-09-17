@@ -7,6 +7,8 @@
 #include "Shape.h"
 #include <string>
 #include <vector>
+#include <sstream>
+#include <istream>
 
 class Rectangle : public Shape {
 protected:
@@ -63,6 +65,29 @@ public:
                 grid[currentY][currentX] = symbol;
             }
         }
+    }
+
+    std::string serialize() const override {
+        return "rectangle " + std::to_string(x) + " " + std::to_string(y) + " " +
+               (color.empty() ? "*" : color) + " " + (isFilled ? "fill" : "frame") + " " +
+               std::to_string(width) + " " + std::to_string(height);
+    }
+
+    bool edit(const std::string &args) override {
+        std::stringstream ss(args);
+        int nx, ny, nw, nh;
+        if (ss >> nx >> ny >> nw >> nh) {
+            x = nx; y = ny;
+            width = nw; height = nh;
+            return true;
+        }
+        ss.clear();
+        ss.str(args);
+        if (ss >> nw >> nh) {
+            width = nw; height = nh;
+            return true;
+        }
+        return false;
     }
 };
 

@@ -47,6 +47,14 @@ public:
     }
 
     std::string getNextId();
+
+    void printSupportedShapes() const;
+
+    bool editSelected(std::stringstream &ss);
+
+    bool saveToFile(const std::string &filepath) const;
+
+    bool loadFromFile(const std::string &filepath);
 };
 
 

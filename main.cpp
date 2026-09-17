@@ -11,9 +11,6 @@
 int main() {
     Board board (80,25);
     std::string line;
-    std::cout << "The format has to be: add fill red rectangle 10 5 20 8\n";
-    std::cout << "                     /   /     /     |      /  /  |   \\    \n";
-    std::cout << "               action mode color shapeType x  y width height\n";
     std::cout << ">> ";
 
     while (std::getline(std::cin, line)) {
@@ -171,6 +168,26 @@ int main() {
 
         else if (command == "remove") {
             board.removeSelected();
+        }
+        else if (command == "shapes") {
+            board.printSupportedShapes();
+        }
+        else if (command == "edit") {
+            board.editSelected(ss);
+        }
+        else if (command == "save") {
+            std::string filename;
+            if (!(ss >> filename)) {
+                filename = "File.txt";
+            }
+            board.saveToFile(filename);
+        }
+        else if (command == "load") {
+            std::string filename;
+            if (!(ss >> filename)) {
+                filename = "File.txt";
+            }
+            board.loadFromFile(filename);
         }
 
         else {

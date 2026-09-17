@@ -8,6 +8,8 @@
 #include "Shape.h"
 #include <cmath>
 #include <algorithm>
+#include <sstream>
+#include <istream>
 
 class Triangle : public Shape {
 private:
@@ -102,6 +104,25 @@ public:
                 }
             }
         }
+    }
+
+    std::string serialize() const override {
+        return "triangle " + std::to_string(x) + " " + std::to_string(y) + " " +
+               (color.empty() ? "*" : color) + " " + (isFilled ? "fill" : "frame") + " " +
+               std::to_string(x2) + " " + std::to_string(y2) + " " +
+               std::to_string(x3) + " " + std::to_string(y3);
+    }
+
+    bool edit(const std::string &args) override {
+        std::stringstream ss(args);
+        int nx1, ny1, nx2, ny2, nx3, ny3;
+        if (ss >> nx1 >> ny1 >> nx2 >> ny2 >> nx3 >> ny3) {
+            x = nx1;   y = ny1;
+            x2 = nx2;  y2 = ny2;
+            x3 = nx3;  y3 = ny3;
+            return true;
+        }
+        return false;
     }
 };
 
