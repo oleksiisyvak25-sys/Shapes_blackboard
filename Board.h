@@ -55,6 +55,8 @@ public:
     bool saveToFile(const std::string &filepath) const;
 
     bool loadFromFile(const std::string &filepath);
+
+    void bringSelectedToFront();
 };
 
 

@@ -1,0 +1,15 @@
+rectangle 0 0 blue fill 80 25
+circle 0 0 yellow fill 5
+line 0 7 yellow 0 9
+line 3 6 yellow 8 8
+line 8 5 yellow 12 7
+line 12 4 yellow 17 6
+line 13 2 yellow 20 3
+line 13 0 yellow 21 0
+circle 40 5 white fill 2
+circle 44 5 white fill 2
+circle 49 5 white fill 2
+rectangle 0 22 green fill 80 3
+rectangle 50 17 grey fill 10 5
+triangle 50 16 red fill 55 14 59 16
+rectangle 51 19 orange fill 3 3

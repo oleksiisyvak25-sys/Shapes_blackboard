@@ -180,13 +180,12 @@ bool Board::paintSelected(const std::string &newColor) {
 bool Board::moveSelected(int newX, int newY) {
     if (selectedShape != nullptr) {
         selectedShape->move(newX, newY);
+        bringSelectedToFront();
         std::cout << selectedShape->getId() << " " << selectedShape->getType() << " moved\n";
         return true;
     }
-    else {
-        std::cout << "Error: no shape selected\n";
-        return false;
-    }
+    std::cout << "Error: no shape selected\n";
+    return false;
 }
 
 void Board::printSupportedShapes() const {
@@ -217,6 +216,7 @@ bool Board::editSelected(std::stringstream &ss) {
     std::getline(ss, args);
 
     if (selectedShape->edit(args)) {
+        bringSelectedToFront();
         std::cout << selectedShape->getId() << " " << selectedShape->getType() << " edited\n";
         return true;
     } else {
@@ -245,32 +245,85 @@ bool Board::loadFromFile(const std::string &filepath) {
         return false;
     }
 
-    clear();
-    std::string type;
-    while (in >> type) {
+    std::vector<std::unique_ptr<Shape>> tempShapes;
+    std::string line;
+    int lineNum = 0;
+
+    while (std::getline(in, line)) {
+        lineNum++;
+
+        if (line.empty() || line.find_first_not_of(" \t\r\n") == std::string::npos) {
+            continue;
+        }
+
+        std::stringstream ss(line);
+        std::string type;
+        if (!(ss >> type)) continue;
+
         std::string id = getNextId();
+
         if (type == "rectangle") {
             int x, y, w, h;
             std::string c, mode;
-            in >> x >> y >> c >> mode >> w >> h;
-            addShape(std::make_unique<Rectangle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), w, h));
-        } else if (type == "circle") {
+            if (!(ss >> x >> y >> c >> mode >> w >> h)) {
+                std::cout << "Error: corrupted rectangle at line " << lineNum << "\n";
+                return false;
+            }
+            tempShapes.push_back(std::make_unique<Rectangle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), w, h));
+        }
+        else if (type == "circle") {
             int x, y, r;
             std::string c, mode;
-            in >> x >> y >> c >> mode >> r;
-            addShape(std::make_unique<Circle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), r));
-        } else if (type == "triangle") {
+            if (!(ss >> x >> y >> c >> mode >> r)) {
+                std::cout << "Error: corrupted circle at line " << lineNum << "\n";
+                return false;
+            }
+            tempShapes.push_back(std::make_unique<Circle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), r));
+        }
+        else if (type == "triangle") {
             int x, y, x2, y2, x3, y3;
             std::string c, mode;
-            in >> x >> y >> c >> mode >> x2 >> y2 >> x3 >> y3;
-            addShape(std::make_unique<Triangle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), x2, y2, x3, y3));
-        } else if (type == "line") {
+            if (!(ss >> x >> y >> c >> mode >> x2 >> y2 >> x3 >> y3)) {
+                std::cout << "Error: corrupted triangle at line " << lineNum << "\n";
+                return false;
+            }
+            tempShapes.push_back(std::make_unique<Triangle>(id, x, y, (c == "*" ? "" : c), (mode == "fill"), x2, y2, x3, y3));
+        }
+        else if (type == "line") {
             int x1, y1, x2, y2;
             std::string c;
-            in >> x1 >> y1 >> c >> x2 >> y2;
-            addShape(std::make_unique<Line>(id, x1, y1, (c == "*" ? "" : c), x2, y2));
+            if (!(ss >> x1 >> y1 >> c >> x2 >> y2)) {
+                std::cout << "Error: corrupted line at line " << lineNum << "\n";
+                return false;
+            }
+            tempShapes.push_back(std::make_unique<Line>(id, x1, y1, (c == "*" ? "" : c), x2, y2));
+        }
+        else {
+            std::cout << "Error: unknown shape or corrupted format at line " << lineNum << " (\"" << type << "\")\n";
+            return false;
         }
     }
+
+    clear();
+    this->shapes = std::move(tempShapes);
+    this->selectedShape = nullptr;
     std::cout << "Board loaded from " << filepath << "\n";
     return true;
+}
+
+void Board::bringSelectedToFront() {
+    if (!selectedShape) return;
+    for (auto it = shapes.begin(); it != shapes.end(); ++it) {
+        if (it->get() == selectedShape) {
+            shapes.push_back(std::move(*it));
+            shapes.erase(it);
+            break;
+        }
+    }
+}
+
+static bool isValidColor(const std::string &c) {
+    return (c == "*" || c == "red" || c == "green" || c == "blue" ||
+            c == "yellow" || c == "magenta" || c == "cyan" ||
+            c == "orange" || c == "pink" || c == "grey" || c == "gray" || c == "white");
 }
