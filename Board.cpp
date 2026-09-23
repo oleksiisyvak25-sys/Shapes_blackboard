@@ -312,13 +312,15 @@ bool Board::loadFromFile(const std::string &filepath) {
 }
 
 void Board::bringSelectedToFront() {
-    if (!selectedShape) return;
-    for (auto it = shapes.begin(); it != shapes.end(); ++it) {
-        if (it->get() == selectedShape) {
-            shapes.push_back(std::move(*it));
-            shapes.erase(it);
-            break;
-        }
+    if (!selectedShape || shapes.size() <= 1) return;
+
+    auto it = std::find_if(shapes.begin(), shapes.end(),
+        [this](const std::unique_ptr<Shape>& s) {
+            return s.get() == selectedShape;
+        });
+
+    if (it != shapes.end() && it + 1 != shapes.end()) {
+        std::rotate(it, it + 1, shapes.end());
     }
 }
 
